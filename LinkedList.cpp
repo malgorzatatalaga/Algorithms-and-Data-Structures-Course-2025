@@ -1,62 +1,58 @@
 #include <iostream>
+#include "LinkedList.h"
 
-class Node
+using namespace std;
+
+Node::Node(int value)
 {
-public:
-    int value;
-    Node* next;
-
-    Node(int value)
-    {
-        this->value = value;
-        this->next = nullptr;
-    }
+    this->value = value;
+    this->next = nullptr;
 };
 
-class LinkedList
+LinkedList::LinkedList()
 {
-    Node* head;
-public:
-    LinkedList()
+    this->head = nullptr;
+}
+
+void LinkedList::addNode(int value)
+{
+    Node* newNode = new Node(value);
+
+    if (this->head == nullptr)
     {
-        this->head = nullptr;
+        this->head = newNode;
     }
-
-    void addNode(int value)
+    else
     {
-        Node* newNode = new Node(value);
-        if (this->head == nullptr)
+        if (value < head->value)
         {
-            this->head = newNode;
-        } else 
-        {
-            if (newNode->value < head->value)
-            {
-                newNode->next=head;
-                head=newNode;
-            }
-            else
-            {
-                Node* currentNode = this->head;
-                while (currentNode->next != nullptr)
-                {
-                    if (value > currentNode->value && value < currentNode->next->value)
-                    {
-                        newNode->next = currentNode->next;
-                        currentNode->next = newNode;
-
-                    }
-                    currentNode = currentNode->next;
-                    break;
-                }
-                if (currentNode->next==nullptr)
-                {
-                    currentNode->next = newNode;
-                }
-                
-            }
-            
+            newNode->next = head;
+            head = newNode;
+            return;
         }
-        
+            
+        Node* currentNode = head;
+        while (currentNode->next != nullptr)
+        {
+            if (value > currentNode->value && value < currentNode->next->value)
+            {
+                newNode->next = currentNode->next;
+                currentNode->next = newNode;
+                return;
+            }
+            currentNode = currentNode->next;
+        }
+        currentNode->next = newNode;
     }
-};
+}
+
+void LinkedList::printList()
+{
+    Node* currentNode = head;
+    while (currentNode != nullptr)
+    {
+        cout << currentNode->value << " -> ";
+        currentNode = currentNode->next;
+    }
+    cout << "null" << endl;
+}
